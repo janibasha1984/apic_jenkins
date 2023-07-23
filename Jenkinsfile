@@ -262,7 +262,7 @@ def Publish(String product, String catalog, String org, String server, String sp
 
 
 
-}
+//}
 
 //Stage the artifacts to Stage catalog on api manager
 def Stage(String product, String catalog, String org, String server, String space = "") {
