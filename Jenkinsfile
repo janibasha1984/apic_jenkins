@@ -21,7 +21,7 @@ import org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException
 
 // Provide your GitHub information here
 jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins" 
-jenkinsfileBranch = "master"
+jenkinsfileBranch = "main"
 
 //Credential objects defined in Jenkins
 gitCredentials = "719d79c8-60aa-4d89-97b9-5adedd3d0b81"
@@ -38,31 +38,31 @@ def runtestStatus = "0"
 
 node('JenkinsNode') { //This is the worker node which is defined in Jenkins Master.  I only built one. 
     try{
-        echo "Workspace: ${env.WORKSPACE}"        
-
+      //  echo "Workspace: ${env.WORKSPACE}"        
+       echo "Workspace: "jani""  
         //Checkout the code 
         GitCheckout(env.WORKSPACE, jenkinsfileURL, jenkinsfileBranch, gitCredentials)
 
         //Load the apic & jenkins variables from the property files
-        def yourBuild = readProperties file: 'environment.properties'
-        def jenkins = readProperties file: 'jenkins.properties'
+       // def yourBuild = readProperties file: 'environment.properties'
+      //  def jenkins = readProperties file: 'jenkins.properties'
 
-        sh """
-            cd ${workspace}
-            echo "${yourBuild.devServer}"
-            echo "${yourBuild.devOrg}"
-            echo "${yourBuild.devRealm}"
-            echo "${yourBuild.devCatalog}"
-        """
+      //  sh """
+        //    cd ${workspace}
+        //    echo "${yourBuild.devServer}"
+        //    echo "${yourBuild.devOrg}"
+         //   echo "${yourBuild.devRealm}"
+        //    echo "${yourBuild.devCatalog}"
+        //"""
  
         //Provide the option to choose the deployment environment
         def environmentChoices = ['Dev', 'Test', 'Stage'].join('\n')
         def environment = null
         environment = input(message: "Choose the publishing target environment ?",
                     parameters: [choice(choices: environmentChoices, name: 'Environment')])       
-        sh """
-            echo "${environment}"
-        """ 
+        //sh """
+        //    echo "${environment}"
+       // """ 
         //This method will accept the apic license.
         //Not needed in the container environment as it is already done while building the image.         
         Apic_Initiate()    
