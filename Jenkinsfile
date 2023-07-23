@@ -39,7 +39,7 @@ def runtestStatus = "0"
 node('JenkinsNode') { //This is the worker node which is defined in Jenkins Master.  I only built one. 
     try{
       //  echo "Workspace: ${env.WORKSPACE}"        
-       echo "Workspace: "jani""  
+           echo 'Entering Stage - Nexus Upload
         //Checkout the code 
         GitCheckout(env.WORKSPACE, jenkinsfileURL, jenkinsfileBranch, gitCredentials)
 
