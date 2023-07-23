@@ -244,16 +244,16 @@ def Publish(String product, String catalog, String org, String server, String sp
 
 // Run Unit Tests
 
-def Runtest(String apikey, String apisecret, String testurl) {
-    echo "Publishing product on ${testurl}"
+//def Runtest(String apikey, String apisecret, String testurl) {
+ //   echo "Publishing product on ${testurl}"
 
-    def status = sh(script: 'curl -k -X POST \
-            -H X-API-Key:706724d1-de96-43a6-9854-928a8ad17b2f \
-            -H X-API-Secret:86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8 -H Content-Type:application/json -d " { "options": {"allAssertions": true,"JUnitFormat": true},
-            "variables": { string: string, }}" https://hub.apicisoa.com/app/api/rest/v1/68d05760-98be-4ee6-b9a4-d4d188d31ee3867/tests/run', returnStatus: true)
-        if (status == 0) {            
-            return status             
-        } 
+   // def status = sh(script: 'curl -k -X POST \
+   //         -H X-API-Key:706724d1-de96-43a6-9854-928a8ad17b2f \
+  //          -H X-API-Secret:86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8 -H Content-Type:application/json -d " { "options": {"allAssertions": true,"JUnitFormat": true},
+   //         "variables": { string: string, }}" https://hub.apicisoa.com/app/api/rest/v1/68d05760-98be-4ee6-b9a4-d4d188d31ee3867/tests/run', returnStatus: true)
+   //     if (status == 0) {            
+   //         return status             
+   //     } 
  //   def results = new XmlParser().parseText(xml)
  //       println "errors = ${results.attribute("errors")}"
  //   runtestStatus = ${results.attribute("errors")}
