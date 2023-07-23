@@ -20,16 +20,16 @@ import org.apache.commons.lang3.time.DateUtils
 import org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException
 
 // Provide your GitHub information here
-jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins" 
-jenkinsfileBranch = "main"
+jenkinsfileURL = "https://github.com/bkataoka/book" 
+jenkinsfileBranch = "master"
 
 //Credential objects defined in Jenkins
-gitCredentials = "719d79c8-60aa-4d89-97b9-5adedd3d0b81"
+gitCredentials = "666e7137-880f-46f5-9e79-e1bc77363e64"
 
 //Product yaml file
-def product = "weather-product_1.0.0.yaml" //Eg: "Chapter 13 member_1.0.2.yaml"
+def product = "member_1.0.2.yaml" //Eg: "Chapter 13 member_1.0.2.yaml"
 //Name of the API Product in Chapter 13
-def productName = "weather-product" //Eg: "Chapter 13 product reference"
+def productName = "member" //Eg: "Chapter 13 product reference"
 // These are hard coded as an example for API Hooks
 def apikey = "706724d1-de96-43a6-9854-928a8ad17b2f"
 def apisecret = "86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8"
@@ -38,31 +38,31 @@ def runtestStatus = "0"
 
 node('JenkinsNode') { //This is the worker node which is defined in Jenkins Master.  I only built one. 
     try{
-      //  echo "Workspace: ${env.WORKSPACE}"        
-           echo 'Entering Stage - Nexus Upload'
+        echo "Workspace: ${env.WORKSPACE}"        
+
         //Checkout the code 
         GitCheckout(env.WORKSPACE, jenkinsfileURL, jenkinsfileBranch, gitCredentials)
 
         //Load the apic & jenkins variables from the property files
-       // def yourBuild = readProperties file: 'environment.properties'
-      //  def jenkins = readProperties file: 'jenkins.properties'
+        def yourBuild = readProperties file: 'environment.properties'
+        def jenkins = readProperties file: 'jenkins.properties'
 
-      //  sh """
-        //    cd ${workspace}
-        //    echo "${yourBuild.devServer}"
-        //    echo "${yourBuild.devOrg}"
-         //   echo "${yourBuild.devRealm}"
-        //    echo "${yourBuild.devCatalog}"
-        //"""
+        sh """
+            cd ${workspace}
+            echo "${yourBuild.devServer}"
+            echo "${yourBuild.devOrg}"
+            echo "${yourBuild.devRealm}"
+            echo "${yourBuild.devCatalog}"
+        """
  
         //Provide the option to choose the deployment environment
         def environmentChoices = ['Dev', 'Test', 'Stage'].join('\n')
         def environment = null
         environment = input(message: "Choose the publishing target environment ?",
                     parameters: [choice(choices: environmentChoices, name: 'Environment')])       
-        //sh """
-        //    echo "${environment}"
-       // """ 
+        sh """
+            echo "${environment}"
+        """ 
         //This method will accept the apic license.
         //Not needed in the container environment as it is already done while building the image.         
         Apic_Initiate()    
@@ -244,16 +244,16 @@ def Publish(String product, String catalog, String org, String server, String sp
 
 // Run Unit Tests
 
-//def Runtest(String apikey, String apisecret, String testurl) {
- //   echo "Publishing product on ${testurl}"
+def Runtest(String apikey, String apisecret, String testurl) {
+    echo "Publishing product on ${testurl}"
 
-   // def status = sh(script: 'curl -k -X POST \
-   //         -H X-API-Key:706724d1-de96-43a6-9854-928a8ad17b2f \
-  //          -H X-API-Secret:86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8 -H Content-Type:application/json -d " { "options": {"allAssertions": true,"JUnitFormat": true},
-   //         "variables": { string: string, }}" https://hub.apicisoa.com/app/api/rest/v1/68d05760-98be-4ee6-b9a4-d4d188d31ee3867/tests/run', returnStatus: true)
-   //     if (status == 0) {            
-   //         return status             
-   //     } 
+    def status = sh(script: 'curl -k -X POST \
+            -H X-API-Key:706724d1-de96-43a6-9854-928a8ad17b2f \
+            -H X-API-Secret:86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8 -H Content-Type:application/json -d " { "options": {"allAssertions": true,"JUnitFormat": true},
+            "variables": { string: string, }}" https://hub.apicisoa.com/app/api/rest/v1/68d05760-98be-4ee6-b9a4-d4d188d31ee3867/tests/run', returnStatus: true)
+        if (status == 0) {            
+            return status             
+        } 
  //   def results = new XmlParser().parseText(xml)
  //       println "errors = ${results.attribute("errors")}"
  //   runtestStatus = ${results.attribute("errors")}
@@ -262,7 +262,7 @@ def Publish(String product, String catalog, String org, String server, String sp
 
 
 
-//}
+}
 
 //Stage the artifacts to Stage catalog on api manager
 def Stage(String product, String catalog, String org, String server, String space = "") {
@@ -278,80 +278,3 @@ def Stage(String product, String catalog, String org, String server, String spac
         return status          
     }     
 }
-/*
-//Replace the existing product with a new version of the product
-def Replace(String productName, String newVersion, String productPlanMapFile, String catalog, String org, String server, String space = ""){
-    echo "Replacing the existing product ${productName} with the new version of the product ${newVersion}"
-    def status = sh script: "apic products:replace --scope space ${productName}:${newVersion} ${productPlanMapFile} --space ${space} --catalog ${catalog} --org ${org} --server ${server}",
-        returnStatus:true   
-    return status
-}
-
-/*
-*Validate change control
-*Deploy to production
-*/
-/*
-def ValidateCCAndDeploy(String server, String creds, String product, String catalog, String org, String realm,
-        String leadDeveloperID, String appdevManagerID, String appdevManagerEmail, String space = "", 
-        String environment, String productName) {
-    
-            //Add your code to integrate with Change Control API, if it is applicable         
-
-            //Promote the code to next envionment
-            //Check if the API has to be versioned
-            print "For the 1st deployment, Versioning is not required. Select it as No."
-            print "For the subsequent deployment, Versioning is required. Select it as Yes."
-            print "Is the API already published in ${environment} ?"
-            def apiVersioningChoices = ['Yes', 'No'].join('\n')
-            def apiVersioning = null
-            apiVersioning = input(message: "Is API Versioning required ?",
-                    parameters: [choice(choices: apiVersioningChoices, name: 'apiVersioning')])
-
-            if (apiVersioning == 'No') {
-                //Publish the product 
-                Deploy(server, creds, product, catalog, org, realm, space)
-            }
-            else {  
-                print "Please enter staging product file name. Eg:sample_product_1.1.0.yaml"                
-                //Get the satging product file name
-                def stagingProduct = input(
-                        id: 'stagingProduct', message: 'Please enter staging product file name. Eg:sample_product_1.1.0.yaml', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: 'sample_product_1.1.0.yaml', description: 'Staging Product Version', name: 'stagingProduct']
-                ])
-
-                print "Please staging product name. Eg:sample"                
-                //Get the staging product name
-                def stagingProductName = input(
-                        id: 'stagingProductName', message: 'Please enter staging product name. Eg:sample', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: 'sample', description: 'Staging Product Name', name: 'stagingProductName']
-                ])                
-
-                print "Please enter new version number of the product."                
-                //Get the new version number
-                def newVersion = input(
-                        id: 'newVersion', message: 'Please enter new version number of the product.', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: '0.0.0', description: 'New Version Number', name: 'newNersionNumber']
-                ]) 
-
-                print "Please enter the product plan mapping file name. Eg:product-map-file.txt"
-                //Get the plan mapping
-                def productPlanMapFile = input(
-                        id: 'productPlanMapFile', message: 'Please enter the product plan mapping file name. Eg:product-map-file.txt', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: 'product-map-file.txt', description: 'Plan Mapping', name: 'planMapping']
-                ])
-
-                //Replace the existing product with the new version & corresponding plan                               
-                Deploy(server, creds, product, catalog, org, realm, space, "true", stagingProduct, stagingProductName, newVersion, productPlanMapFile)                
-            }
-                                     
-            changeOption = false                     
-        }
-       // else{   
-                //Change should not be promoted to Production         
-        //        throw new AbortException("FAILED")
-        //}
-        
-    */
-  //  }
-
