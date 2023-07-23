@@ -21,7 +21,7 @@ import org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException
 
 // Provide your GitHub information here
 jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins" 
-jenkinsfileBranch = "master"
+jenkinsfileBranch = "main"
 
 //Credential objects defined in Jenkins
 gitCredentials = "719d79c8-60aa-4d89-97b9-5adedd3d0b81"
