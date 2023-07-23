@@ -111,7 +111,7 @@ def GitCheckout(String workspace, String url, String branch, String credentialsI
                "\"${user}:${password}\"@" + url.substring(urlDelim + 3);        
         
         //Fetch Jenkins workspace
-        directoryName = sh (
+        directoryName = bat (
             script:"""
             basename ${workspace}
             """,
