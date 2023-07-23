@@ -24,7 +24,7 @@ jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins"
 jenkinsfileBranch = "master"
 
 //Credential objects defined in Jenkins
-gitCredentials = "666e7137-880f-46f5-9e79-e1bc77363e64"
+gitCredentials = "719d79c8-60aa-4d89-97b9-5adedd3d0b81"
 
 //Product yaml file
 def product = "member_1.0.2.yaml" //Eg: "Chapter 13 member_1.0.2.yaml"
