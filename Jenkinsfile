@@ -20,7 +20,7 @@ import org.apache.commons.lang3.time.DateUtils
 import org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException
 
 // Provide your GitHub information here
-jenkinsfileURL = "https://github.com/bkataoka/book" 
+jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins" 
 jenkinsfileBranch = "master"
 
 //Credential objects defined in Jenkins
