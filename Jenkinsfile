@@ -20,16 +20,16 @@ import org.apache.commons.lang3.time.DateUtils
 import org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException
 
 // Provide your GitHub information here
-jenkinsfileURL = "https://github.com/bkataoka/book" 
+jenkinsfileURL = "https://github.com/janibasha1984/apic_jenkins" 
 jenkinsfileBranch = "master"
 
 //Credential objects defined in Jenkins
-gitCredentials = "666e7137-880f-46f5-9e79-e1bc77363e64"
+gitCredentials = "719d79c8-60aa-4d89-97b9-5adedd3d0b81"
 
 //Product yaml file
-def product = "member_1.0.2.yaml" //Eg: "Chapter 13 member_1.0.2.yaml"
+def product = "weather-product_1.0.0.yaml" //Eg: "Chapter 13 member_1.0.2.yaml"
 //Name of the API Product in Chapter 13
-def productName = "member" //Eg: "Chapter 13 product reference"
+def productName = "weather-product" //Eg: "Chapter 13 product reference"
 // These are hard coded as an example for API Hooks
 def apikey = "706724d1-de96-43a6-9854-928a8ad17b2f"
 def apisecret = "86062657054832da7c24420167f095fb7fd6123db6fb022cada76d262a2e5cb8"
@@ -47,7 +47,7 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
         def yourBuild = readProperties file: 'environment.properties'
         def jenkins = readProperties file: 'jenkins.properties'
 
-        sh """
+        bat """
             cd ${workspace}
             echo "${yourBuild.devServer}"
             echo "${yourBuild.devOrg}"
@@ -60,7 +60,7 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
         def environment = null
         environment = input(message: "Choose the publishing target environment ?",
                     parameters: [choice(choices: environmentChoices, name: 'Environment')])       
-        sh """
+        bat """
             echo "${environment}"
         """ 
         //This method will accept the apic license.
