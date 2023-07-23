@@ -41,7 +41,7 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
        bat "echo "Workspace: ${env.WORKSPACE}" "       
 
         //Checkout the code 
-        GitCheckout(env.WORKSPACE, jenkinsfileURL, jenkinsfileBranch, gitCredentials)
+         GitCheckout(env.WORKSPACE, jenkinsfileURL, jenkinsfileBranch, gitCredentials)
 
         //Load the apic & jenkins variables from the property files
         def yourBuild = readProperties file: 'environment.properties'
