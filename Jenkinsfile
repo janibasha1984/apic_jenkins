@@ -60,9 +60,9 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
         def environment = null
         environment = input(message: "Choose the publishing target environment ?",
                     parameters: [choice(choices: environmentChoices, name: 'Environment')])       
-        bat """
+        bat "
             echo "${environment}"
-        """ 
+        "
         //This method will accept the apic license.
         //Not needed in the container environment as it is already done while building the image.         
         Apic_Initiate()    
@@ -96,7 +96,7 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
 
 def Apic_Initiate() {
     //You have to accept license when running apic CLI
-    sh "echo n| apic --accept-license"    
+    bat "echo n| apic --accept-license"    
     
 }
 
@@ -119,7 +119,7 @@ def GitCheckout(String workspace, String url, String branch, String credentialsI
         )
         
         //Clean up old workspace so you can populate with updated GitHub resources
-        sh """
+        bat """
             cd ${workspace}
             cd ..
             rm -fr ${directoryName}
@@ -212,7 +212,7 @@ def Login(String server, String creds, String realm){
         passwordVar = env.PASSWORD
         
       
-        sh "apic login --server ${server} --username ${usernameVar} --password ${passwordVar} --realm ${realm}"        
+        bat "apic login --server ${server} --username ${usernameVar} --password ${passwordVar} --realm ${realm}"        
     } 
 
 }
@@ -227,14 +227,14 @@ def Logout(String server){
 def Publish(String product, String catalog, String org, String server, String space = ""){
     echo "Publishing product ${product}"
     if (!space.trim()) {
-        def status = sh script: "apic products:publish ${product} --catalog ${catalog} --org ${org} --server ${server}", 
+        def status = bat script: "apic products:publish ${product} --catalog ${catalog} --org ${org} --server ${server}", 
             returnStatus: true  
         if (status == 0) {                            
             return status             
         }
     }
     else {
-        def status = sh script: "apic products:publish --scope space ${product} --space ${space} --catalog ${catalog} --org ${org} --server ${server}", 
+        def status = bat script: "apic products:publish --scope space ${product} --space ${space} --catalog ${catalog} --org ${org} --server ${server}", 
             returnStatus: true  
         if (status == 0) {            
             return status             
@@ -268,12 +268,12 @@ def Publish(String product, String catalog, String org, String server, String sp
 def Stage(String product, String catalog, String org, String server, String space = "") {
     echo "Staging product ${product}"
     if (!space.trim()) {
-        def status = sh script: "apic products:publish --stage ${product} --catalog ${catalog} --org ${org} --server ${server}", 
+        def status = bat script: "apic products:publish --stage ${product} --catalog ${catalog} --org ${org} --server ${server}", 
             returnStatus: true  
         return status  
     }
     else {
-        def status = sh script: "apic products:publish --stage --scope space ${product} --space ${space} --catalog ${catalog} --org ${org} --server ${server}", 
+        def status = bat script: "apic products:publish --stage --scope space ${product} --space ${space} --catalog ${catalog} --org ${org} --server ${server}", 
             returnStatus: true  
         return status          
     }     
