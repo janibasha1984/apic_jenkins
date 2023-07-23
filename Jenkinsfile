@@ -60,9 +60,9 @@ node('JenkinsNode') { //This is the worker node which is defined in Jenkins Mast
         def environment = null
         environment = input(message: "Choose the publishing target environment ?",
                     parameters: [choice(choices: environmentChoices, name: 'Environment')])       
-        bat "
+        bat """
             echo "${environment}"
-        "
+        """
         //This method will accept the apic license.
         //Not needed in the container environment as it is already done while building the image.         
         Apic_Initiate()    
